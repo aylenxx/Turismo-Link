@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil — Link Turismo Perú</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="shared.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={corePlugins:{preflight:false},theme:{extend:{}}}</script>
+  <style>
+    body{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:3rem 1.2rem 2rem;transition:background .4s var(--ease)}
+    .wrap{width:100%;max-width:420px;padding:var(--card-padding,2rem);transition:all .35s var(--ease)}
+    .tpl-minimal .wrap{padding-top:0;padding-bottom:0;padding-left:var(--card-padding,2rem);padding-right:var(--card-padding,2rem)}
+    .p-avatar{width:var(--avatar-size,88px);height:var(--avatar-size,88px);border-radius:50%;display:grid;place-items:center;font-size:calc(var(--avatar-size,88px) * 0.28);margin:0 auto 1.2rem;background:linear-gradient(135deg,var(--brand-soft),var(--brand));box-shadow:0 6px 24px rgba(0,0,0,.15);overflow:hidden;transition:all .3s var(--ease);border:3px solid rgba(255,255,255,.9)}
+    .p-avatar:hover{transform:scale(1.05);box-shadow:0 8px 32px rgba(0,0,0,.2)}
+    .p-name{font-family:'Sora',sans-serif;font-weight:800;font-size:1.5rem;text-align:center;letter-spacing:-.02em;line-height:1.2}
+    .p-role{color:var(--ink-muted);font-size:.82rem;text-align:center;margin-top:.3rem;font-weight:500;letter-spacing:.3px}
+    .p-bio{font-size:.88rem;color:var(--ink-soft);text-align:center;margin-top:.9rem;max-width:340px;margin-left:auto;margin-right:auto;line-height:1.55}
+    .p-links{margin-top:2rem;display:flex;flex-direction:column;gap:.65rem}
+    .p-link{display:flex;align-items:center;gap:.85rem;padding:.9rem 1.15rem;border-radius:16px;background:var(--surface);border:1.5px solid var(--border);transition:all .28s var(--ease);text-decoration:none;position:relative;overflow:hidden}
+    .p-link::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(255,255,255,.4));opacity:0;transition:opacity .28s var(--ease);pointer-events:none}
+    .p-link:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.1);border-color:var(--brand-soft)}
+    .p-link:hover::before{opacity:1}
+    .p-link .l-ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff;font-size:1rem;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.15);transition:transform .25s var(--ease)}
+    .p-link:hover .l-ico{transform:scale(1.1)}
+    .p-link .l-txt{flex:1;min-width:0}
+    .p-link .l-txt h4{font-size:.9rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink);transition:color .2s var(--ease)}
+    .p-link:hover .l-txt h4{color:var(--brand)}
+    .p-link .l-txt p{font-size:.72rem;color:var(--ink-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.1rem}
+    .p-link .l-arrow{color:var(--ink-muted);font-size:.75rem;transition:all .25s var(--ease);opacity:.5}
+    .p-link:hover .l-arrow{color:var(--brand);opacity:1;transform:translate(2px,-2px)}
+    .p-empty{text-align:center;color:var(--ink-muted);font-size:.85rem;padding:2.5rem 1.2rem;border:2px dashed var(--border);border-radius:16px;margin-top:2rem;background:rgba(255,255,255,.3)}
+    .p-foot{margin-top:2.5rem;text-align:center;font-size:.7rem;color:var(--ink-muted);display:flex;align-items:center;justify-content:center;gap:6px;opacity:.7}
+    .p-foot .ico{width:18px;height:18px;border-radius:5px;background:linear-gradient(135deg,var(--brand),var(--brand-soft));display:grid;place-items:center;color:#fff;font-size:.55rem}
+    .back-link{position:fixed;top:1rem;left:1rem;display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:600;color:var(--ink-soft);background:rgba(255,255,255,.9);padding:.5rem .9rem;border-radius:var(--radius-pill);box-shadow:0 4px 16px rgba(0,0,0,.1);backdrop-filter:blur(12px);z-index:10;transition:all .25s var(--ease);border:1px solid rgba(255,255,255,.6)}
+    .back-link:hover{background:#fff;box-shadow:0 6px 24px rgba(0,0,0,.15);transform:translateY(-1px)}
+    .profile-sticker-wrap{margin:2rem auto 0;display:flex;justify-content:center;align-items:center;transition:all .3s var(--ease)}
+    .profile-sticker-wrap svg{width:84px;height:84px;border-radius:50%;filter:drop-shadow(0 4px 10px rgba(0,0,0,.2))}
+
+    /* CLASSIC */
+    .tpl-classic .wrap{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:2.6rem 2rem;box-shadow:0 8px 40px rgba(0,0,0,.08)}
+    .tpl-classic .p-avatar{border:none !important}
+
+    /* MINIMAL */
+    .tpl-minimal{background:var(--bg)}
+    .tpl-minimal .wrap{padding:0}
+    .tpl-minimal .p-avatar{border-radius:50%;box-shadow:none;border:none;margin:0 auto 1rem}
+    .tpl-minimal .p-name,.tpl-minimal .p-role,.tpl-minimal .p-bio{text-align:center}
+    .tpl-minimal .p-bio{margin-left:auto;margin-right:auto}
+    .tpl-minimal .p-link{background:transparent;border:none;border-bottom:1px solid var(--border);border-radius:0;padding:.85rem .1rem}
+    .tpl-minimal .p-link .l-txt{text-align:left}
+    .tpl-minimal .p-link:hover{transform:none;box-shadow:none;background:transparent}
+    .tpl-minimal .p-link:hover .l-txt h4{color:var(--brand)}
+    .tpl-minimal .p-link .l-ico{background:transparent!important;color:var(--ink)!important;width:auto;font-size:1rem;box-shadow:none}
+    .tpl-minimal .p-foot{justify-content:center}
+
+    /* ADVENTURE */
+    .tpl-adventure{background:radial-gradient(circle at 1px 1px,rgba(0,0,0,.06) 1px,transparent 0) 0 0/16px 16px,var(--bg-warm)}
+    .tpl-adventure .wrap{background:var(--surface);border-radius:24px;padding:2.6rem 2rem;box-shadow:0 8px 40px rgba(0,0,0,.08)}
+    .tpl-adventure .p-avatar{border:3px dashed var(--brand);box-shadow:none;background:var(--bg-warm)}
+    .tpl-adventure .p-name{font-weight:800}
+    .tpl-adventure .p-role{text-transform:uppercase;letter-spacing:1.5px;font-size:.7rem;font-weight:700;color:var(--brand)}
+    .tpl-adventure .p-link{border-radius:var(--radius-pill);border-width:1.5px;padding:.6rem .9rem}
+    .tpl-adventure .p-link .l-txt h4{font-size:.8rem;font-weight:700}
+
+    /* BOLD */
+    .tpl-bold{background:linear-gradient(150deg,var(--brand-deep) 0%,var(--brand) 55%,var(--brand-soft) 100%)}
+    .tpl-bold .wrap{padding:2.6rem 1.8rem}
+    .tpl-bold .p-avatar{border:3px solid rgba(255,255,255,.6);background:rgba(255,255,255,.15);backdrop-filter:blur(6px);box-shadow:0 8px 32px rgba(0,0,0,.2)}
+    .tpl-bold .p-name{color:#fff;font-size:1.6rem}
+    .tpl-bold .p-role{color:rgba(255,255,255,.75)}
+    .tpl-bold .p-bio{color:rgba(255,255,255,.8)}
+    .tpl-bold .p-link{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22);border-radius:var(--radius-pill);backdrop-filter:blur(8px)}
+    .tpl-bold .p-link .l-txt h4{color:#fff}
+    .tpl-bold .p-link .l-txt p{color:rgba(255,255,255,.65)}
+    .tpl-bold .p-link:hover{background:#fff;box-shadow:0 12px 32px rgba(0,0,0,.2)}
+    .tpl-bold .p-link:hover .l-txt h4,.tpl-bold .p-link:hover .l-txt p{color:var(--brand-deep)}
+    .tpl-bold .p-link .l-arrow{color:rgba(255,255,255,.6)}
+    .tpl-bold .p-empty{color:rgba(255,255,255,.75);border-color:rgba(255,255,255,.3)}
+    .tpl-bold .p-foot{color:rgba(255,255,255,.65)}
+    .tpl-bold .back-link{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.2)}
+
+    /* CARDS */
+    .tpl-cards{background:var(--bg-warm)}
+    .tpl-cards .p-link{border-radius:20px;border:none;box-shadow:0 8px 24px rgba(0,0,0,.06);background:var(--surface);padding:1rem 1.2rem}
+    .tpl-cards .p-link:hover{transform:translateY(-5px);box-shadow:0 16px 48px rgba(0,0,0,.12)}
+
+    /* ELEGANT */
+    .tpl-elegant{background:#0f1617!important;color:#f5f0eb}
+    .tpl-elegant .wrap{background:rgba(22,34,36,.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+    .tpl-elegant .p-name{color:#fff;font-size:1.6rem;text-shadow:0 0 20px rgba(255,255,255,.15)}
+    .tpl-elegant .p-role{color:var(--brand-soft);text-transform:uppercase;letter-spacing:1px;font-size:.75rem;font-weight:700;text-shadow:0 0 10px rgba(58,157,176,.3)}
+    .tpl-elegant .p-bio{color:#a3b3b6}
+    .tpl-elegant .p-avatar{border:none !important;box-shadow:0 0 20px rgba(58,157,176,.4);background:#162224}
+    .tpl-elegant .p-link{background:rgba(22,34,36,.7);border:1px solid rgba(255,255,255,.08);border-radius:16px;backdrop-filter:blur(10px)}
+    .tpl-elegant .p-link .l-txt h4{color:#fff}
+    .tpl-elegant .p-link .l-txt p{color:#a3b3b6}
+    .tpl-elegant .p-link:hover{background:rgba(28,45,48,.9);border-color:var(--brand-soft);transform:translateY(-3px);box-shadow:0 12px 32px rgba(58,157,176,.2)}
+    .tpl-elegant .p-foot{color:#5a7175}
+    .tpl-elegant .back-link{background:rgba(255,255,255,.07);color:#fff;border:1px solid rgba(255,255,255,.1)}
+
+    /* AURORA */
+    .tpl-aurora{background:radial-gradient(circle at 15% 15%,rgba(123,107,141,.35),transparent 45%),radial-gradient(circle at 85% 25%,rgba(58,157,176,.32),transparent 45%),radial-gradient(circle at 50% 95%,rgba(232,120,94,.28),transparent 50%),var(--bg)!important}
+    .tpl-aurora .wrap{background:rgba(255,255,255,.6);backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);border:1px solid rgba(255,255,255,.7);border-radius:28px;padding:2.8rem 2rem;box-shadow:0 24px 64px rgba(31,20,50,.15)}
+    .tpl-aurora .p-avatar{border:none;box-shadow:0 0 0 4px rgba(255,255,255,.9),0 0 40px rgba(123,107,141,.5);background:linear-gradient(135deg,var(--brand-soft),var(--brand))}
+    .tpl-aurora .p-name{background:linear-gradient(120deg,var(--brand-deep),var(--brand) 45%,var(--brand-soft));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .tpl-aurora .p-role{color:var(--ink-soft);font-weight:600}
+    .tpl-aurora .p-bio{color:var(--ink-soft)}
+    .tpl-aurora .p-link{background:rgba(255,255,255,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.85);border-radius:20px}
+    .tpl-aurora .p-link:hover{transform:translateY(-4px);background:rgba(255,255,255,.9);box-shadow:0 16px 40px rgba(123,107,141,.25)}
+    .tpl-aurora .p-empty{background:rgba(255,255,255,.45);border-color:rgba(255,255,255,.75)}
+    .tpl-aurora .back-link{background:rgba(255,255,255,.65)}
+
+    /* INCA */
+    .tpl-inca{background:linear-gradient(135deg,rgba(212,165,106,.1),rgba(27,107,125,.1)),#f5f0eb!important}
+    .tpl-inca .wrap{background:linear-gradient(to bottom,rgba(255,255,255,.75),rgba(255,255,255,.55));border:2px solid rgba(212,165,106,.45);border-radius:24px;padding:2.8rem 2rem;backdrop-filter:blur(8px);box-shadow:0 12px 40px rgba(0,0,0,.08)}
+    .tpl-inca .p-avatar{border:none !important;box-shadow:0 0 0 2px rgba(212,165,106,.5),0 8px 24px rgba(0,0,0,.15);background:linear-gradient(135deg,#d4a76a,#8a6d3b)}
+    .tpl-inca .p-name{color:#4a2c11;font-size:1.5rem;font-weight:800}
+    .tpl-inca .p-role{color:#8c6239;text-transform:uppercase;letter-spacing:2px;font-size:.8rem;font-weight:700}
+    .tpl-inca .p-bio{color:#5c3a21;font-size:.9rem}
+    .tpl-inca .p-link{background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,255,255,.75));border:2px solid rgba(74,44,17,.25);border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,.06)}
+    .tpl-inca .p-link:hover{background:linear-gradient(135deg,#fff,rgba(255,255,255,.97));transform:translateY(-4px);box-shadow:0 14px 32px rgba(0,0,0,.12);border-color:rgba(74,44,17,.5)}
+    .tpl-inca .p-link .l-txt h4{color:#4a2c11;font-weight:800}
+    .tpl-inca .p-link .l-txt p{color:#8c6239}
+    .tpl-inca .p-foot{color:#8c6239}
+
+    /* AMAZONÍA */
+    .tpl-amazon{background:radial-gradient(circle at 10% 20%,rgba(45,106,79,.2),transparent 30%),radial-gradient(circle at 90% 80%,rgba(27,107,125,.2),transparent 35%),#f0f8f5!important}
+    .tpl-amazon .wrap{background:linear-gradient(to right,rgba(255,255,255,.88),rgba(255,255,255,.78));border:2px solid rgba(45,106,79,.35);border-radius:24px;padding:2.6rem 2rem;backdrop-filter:blur(8px);box-shadow:0 12px 40px rgba(45,106,79,.1)}
+    .tpl-amazon .p-avatar{border:3px solid rgba(45,106,79,.6);background:linear-gradient(135deg,#40916c,#2d6a4f);box-shadow:0 0 0 2px rgba(45,106,79,.2),0 8px 24px rgba(0,0,0,.12)}
+    .tpl-amazon .p-name{color:#1b4332;font-weight:800}
+    .tpl-amazon .p-role{color:#2d6a4f;font-weight:700}
+    .tpl-amazon .p-link{background:rgba(45,106,79,.06);border:1.5px solid rgba(45,106,79,.2);border-radius:16px}
+    .tpl-amazon .p-link:hover{background:rgba(45,106,79,.12);border-color:#2d6a4f;transform:translateY(-3px);box-shadow:0 10px 28px rgba(45,106,79,.15)}
+    .tpl-amazon .p-link .l-txt h4{color:#1b4332;font-weight:700}
+    .tpl-amazon .p-link .l-txt p{color:#2d6a4f}
+    .tpl-amazon .p-foot{color:#2d6a4f}
+
+    /* COSTA / SUNSET */
+    .tpl-costa{background:linear-gradient(160deg,#fff3e6,#ffe4d1 55%,#ffd2b8)!important}
+    .tpl-costa .wrap{background:rgba(255,255,255,.6);border:2px solid rgba(224,122,95,.35);border-radius:28px;padding:2.8rem 2rem;backdrop-filter:blur(8px);box-shadow:0 12px 40px rgba(224,122,95,.12)}
+    .tpl-costa .p-avatar{border:3px solid #e07a5f;box-shadow:0 8px 24px rgba(224,122,95,.35);background:linear-gradient(135deg,#f4a261,#e07a5f)}
+    .tpl-costa .p-name{color:#a8461f;font-weight:800}
+    .tpl-costa .p-role{color:#c2603d;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-size:.75rem}
+    .tpl-costa .p-bio{color:#8a4a2e}
+    .tpl-costa .p-link{background:rgba(255,255,255,.82);border:1.5px solid rgba(224,122,95,.3);border-radius:100px}
+    .tpl-costa .p-link:hover{background:#e07a5f;border-color:#e07a5f;transform:translateY(-4px);box-shadow:0 12px 28px rgba(224,122,95,.35)}
+    .tpl-costa .p-link .l-txt h4{color:#a8461f}
+    .tpl-costa .p-link .l-txt p{color:#c2603d}
+    .tpl-costa .p-link:hover .l-txt h4,.tpl-costa .p-link:hover .l-txt p{color:#fff}
+    .tpl-costa .p-foot{color:#b5673f}
+
+    /* PROFESIONAL / CORPORATE */
+    .tpl-pro{background:#fbfbfa!important}
+    .tpl-pro .wrap{background:#fff;border:1px solid #e8e4df;border-radius:16px;padding:2.8rem 2.2rem;box-shadow:0 4px 20px rgba(0,0,0,.05)}
+    .tpl-pro .p-avatar{border-radius:12px;border:1.5px solid #1b6b7d;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+    .tpl-pro .p-name{color:#1a1a1a;font-weight:700;font-size:1.4rem}
+    .tpl-pro .p-role{color:#1b6b7d;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;font-size:.72rem}
+    .tpl-pro .p-bio{color:#5a5a5a}
+    .tpl-pro .p-link{background:#fff;border:1px solid #e8e4df;border-radius:12px}
+    .tpl-pro .p-link:hover{border-color:#1b6b7d;background:#f4fbfc;transform:none;box-shadow:0 4px 16px rgba(27,107,125,.08)}
+    .tpl-pro .p-link .l-txt h4{color:#1a1a1a}
+    .tpl-pro .p-link .l-txt p{color:#5a5a5a}
+    .tpl-pro .p-link:hover .l-txt h4{color:#1b6b7d}
+    .tpl-pro .p-foot{color:#999}
+  </style>
+</head>
+<body>
+  <a href="Index.html" class="back-link"><i class="fas fa-arrow-left"></i> Editar</a>
+  <div class="wrap">
+    <div class="p-avatar" id="pAvatar"><i class="fas fa-user"></i></div>
+    <h1 class="p-name" id="pName">Cargando...</h1>
+    <div class="p-role" id="pRole"></div>
+    <p class="p-bio" id="pBio"></p>
+    <div class="p-links" id="pLinks"></div>
+    <div class="profile-sticker-wrap" id="pSticker"></div>
+    <div class="p-foot"><span class="ico"><i class="fas fa-paper-plane"></i></span> Hecho con Link Turismo Perú</div>
+  </div>
+  <script src="shared.js"></script>
+  <script>
+    function render(){
+      var data=getData();
+      var body=document.body;
+      if(!data||(!data.nombre&&!data.avatarImg&&(!data.sticker||data.sticker==='ninguno')&&(!data.enlaces||!data.enlaces.length))){
+        document.getElementById('pName').textContent='Aún no hay un perfil creado';
+        document.getElementById('pRole').textContent='';
+        document.getElementById('pBio').textContent='';
+        document.getElementById('pLinks').innerHTML='<div class="p-empty"><i class="fas fa-user-pen" style="display:block;font-size:1.4rem;margin-bottom:.5rem"></i>Ve al panel y completa tu perfil para verlo aquí.</div>';
+        return;
+      }
+      body.className='tpl-'+(data.template||'classic');
+      applyTheme(data.theme);
+      var wrap=document.querySelector('.wrap');
+      if(wrap)applyCustomization(wrap,data.custom);
+      applyBgImage(body,data.custom);
+      var pAvatar=document.getElementById('pAvatar');
+      applyAvatar(pAvatar,data);
+      document.getElementById('pName').textContent=data.nombre||'Tu nombre';
+      document.getElementById('pRole').textContent=data.titulo||CATS[data.category]||'';
+      document.getElementById('pBio').textContent=data.bio||data.descripcion||'';
+      document.title=(data.nombre||'Perfil')+' — Link Turismo Perú';
+      var enlaces=(data.enlaces||[]).filter(function(l){return l.enabled});
+      var c=document.getElementById('pLinks');
+      if(!enlaces.length){c.innerHTML='<div class="p-empty">Todavía no hay enlaces activos.</div>';return}
+      c.innerHTML=enlaces.map(function(l){var pl=PLAT[l.platform]||PLAT.custom;return '<a class="p-link" href="'+esc(normalizeUrl(l.url,l.platform))+'" target="_blank" rel="noopener" data-id="'+esc(l.id)+'"><div class="l-ico" style="background:'+pl.c+'"><i class="'+pl.i+'"></i></div><div class="l-txt"><h4>'+esc(l.title)+'</h4>'+(l.description?'<p>'+esc(l.description)+'</p>':'')+'</div><i class="fas fa-arrow-up-right-from-square l-arrow"></i></a>'}).join('');
+      c.querySelectorAll('.p-link').forEach(function(a){a.addEventListener('click',function(){var d=getData();if(!d)return;var link=(d.enlaces||[]).find(function(x){return x.id===a.dataset.id});if(link)link.clicks=(link.clicks||0)+1;d.clicks=(d.clicks||0)+1;saveData(d)})});
+    }
+    function renderSticker(data){
+      var container=document.getElementById('pSticker');
+      if(!container)return;
+      container.innerHTML='';
+      if(!data||!data.sticker||data.sticker==='ninguno')return;
+      var stickers={condor:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#1b6b7d"/><text x="50" y="58" text-anchor="middle" font-size="40">🦅</text></svg>',llama:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#d4a76a"/><text x="50" y="58" text-anchor="middle" font-size="40">🦙</text></svg>',inca:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#8b3222"/><text x="50" y="58" text-anchor="middle" font-size="40">🏛️</text></svg>',selva:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#2d6a4f"/><text x="50" y="58" text-anchor="middle" font-size="40">🌿</text></svg>',ola:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#3a9db0"/><text x="50" y="58" text-anchor="middle" font-size="40">🌊</text></svg>',sol:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#e07a5f"/><text x="50" y="58" text-anchor="middle" font-size="40">☀️</text></svg>'};
+      if(stickers[data.sticker])container.innerHTML=stickers[data.sticker];
+    }
+    function initProfile(){render();var data=getData();renderSticker(data)}
+    initProfile();
+    var lastSnapshot=localStorage.getItem(STORAGE_KEY);
+    function refreshIfChanged(){var current=localStorage.getItem(STORAGE_KEY);if(current===lastSnapshot)return;lastSnapshot=current;initProfile()}
+    window.addEventListener('storage',refreshIfChanged);
+    if(syncChannel){syncChannel.onmessage=function(){lastSnapshot=localStorage.getItem(STORAGE_KEY);initProfile()}}
+    window.addEventListener('message',function(e){if(e.data&&e.data.type==='refresh'){user=e.data.user;lastSnapshot=localStorage.getItem(STORAGE_KEY);initProfile()}});
+    setInterval(refreshIfChanged,700);
+  </script>
+</body>
+</html>

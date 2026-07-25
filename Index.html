@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Link Turismo Perú</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="shared.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={corePlugins:{preflight:false},theme:{extend:{}}}</script>
+  <style>
+    .nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(1.5rem,4vw,3rem);height:64px;background:rgba(250,249,247,.92);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid rgba(0,0,0,.04);transition:all .3s var(--ease)}
+    .nav.scrolled{background:rgba(250,249,247,.97);box-shadow:0 2px 20px rgba(0,0,0,.06)}
+    .nav-logo{display:flex;align-items:center;gap:10px;font-family:'Sora',sans-serif;font-weight:800;font-size:1.15rem;color:var(--ink)}
+    .nav-logo .ico{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--brand),var(--coral));display:grid;place-items:center;color:#fff;font-size:.95rem;box-shadow:0 4px 12px rgba(27,107,125,.3)}
+    .nav-logo small{display:block;font-family:'DM Sans',sans-serif;font-weight:500;font-size:.6rem;text-transform:uppercase;letter-spacing:1.8px;color:var(--brand);margin-top:-2px}
+    .nav small{color:var(--brand)!important}
+    .nav-actions{display:flex;align-items:center;gap:.6rem}
+    .dash{padding-top:64px;min-height:100vh;background:var(--bg)}
+    .dash-banner{background:linear-gradient(140deg,#1b3a4b 0%,#0f4c5c 50%,#2d3047 100%);padding:3rem clamp(1.5rem,4vw,3rem) 5.5rem;color:#fff;position:relative;overflow:hidden}
+    .dash-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(58,157,176,.2),transparent 50%),radial-gradient(circle at 20% 80%,rgba(212,165,106,.15),transparent 50%);pointer-events:none}
+    .dash-banner-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:1.5rem;position:relative;z-index:1}
+    .dash-ava{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,#e8c89a,#d4a76a);display:grid;place-items:center;font-size:1.9rem;border:3px solid rgba(255,255,255,.25);flex-shrink:0;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.2);transition:transform .25s var(--ease)}
+    .dash-ava:hover{transform:scale(1.05)}
+    .dash-info h2{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;letter-spacing:-.02em}
+    .dash-info .role{color:rgba(255,255,255,.6);font-size:.85rem;font-weight:500}
+    .dash-info .url-chip{display:inline-flex;align-items:center;gap:6px;margin-top:.6rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);padding:.35rem .9rem;border-radius:var(--radius-pill);font-size:.75rem;color:rgba(255,255,255,.8);cursor:pointer;transition:all .25s var(--ease);backdrop-filter:blur(8px)}
+    .dash-info .url-chip:hover{background:rgba(255,255,255,.18);transform:translateY(-1px)}
+    .dash-info .url-chip i{font-size:.7rem}
+    .dash-grid{max-width:1400px;margin:-4rem auto 3rem;padding:0 clamp(1.5rem,4vw,3rem);display:grid;grid-template-columns:1fr 420px 380px;gap:1.5rem;position:relative;z-index:10}
+    .card{background:var(--surface);border-radius:20px;border:1px solid var(--border);padding:1.5rem;box-shadow:0 4px 20px rgba(0,0,0,.04);transition:all .25s var(--ease)}
+    .card:hover{box-shadow:0 8px 32px rgba(0,0,0,.06)}
+    .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
+    .card-head h3{font-family:'Sora',sans-serif;font-size:.92rem;font-weight:700;display:flex;align-items:center;gap:8px}
+    .card-head h3 i{font-size:.85rem;color:var(--brand)}
+    .links-list{display:flex;flex-direction:column;gap:.55rem}
+    .link-row{display:flex;align-items:center;gap:.85rem;padding:.75rem 1rem;border-radius:14px;border:1px solid var(--border);background:var(--bg);transition:all .25s var(--ease)}
+    .link-row:hover{border-color:var(--brand-soft);background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.05);transform:translateY(-1px)}
+    .link-row .l-icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff;font-size:.95rem;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.12);transition:transform .2s var(--ease)}
+    .link-row:hover .l-icon{transform:scale(1.08)}
+    .link-row .l-body{flex:1;min-width:0}
+    .link-row .l-body h4{font-size:.85rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .link-row .l-body p{font-size:.72rem;color:var(--ink-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .link-row .l-btns{display:flex;gap:2px}
+    .link-row .l-btns button{width:32px;height:32px;border:none;background:none;border-radius:10px;display:grid;place-items:center;color:var(--ink-muted);font-size:.78rem;transition:all .2s var(--ease)}
+    .link-row .l-btns button:hover{background:var(--surface);color:var(--brand);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .link-row .l-btns button.del:hover{color:#d33;background:rgba(221,51,51,.06)}
+    .add-form{display:none;padding:1.1rem;border-radius:14px;border:1.5px dashed var(--border);background:var(--bg);margin-bottom:.8rem}
+    .add-form.open{display:block}
+    .add-form .field-row{margin-bottom:.7rem}
+    .add-form input,.add-form select{width:100%;padding:.65rem .9rem;border:1.5px solid var(--border);border-radius:12px;font-family:inherit;font-size:.82rem;background:#fff;transition:all .2s var(--ease)}
+    .add-form input:focus,.add-form select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(27,107,125,.08)}
+    .add-form .af-actions{display:flex;gap:.5rem;justify-content:flex-end}
+    .avatar-preview{width:68px;height:68px;border-radius:50%;flex-shrink:0;cursor:pointer;background:linear-gradient(135deg,#e8c89a,#d4a76a);display:grid;place-items:center;font-size:1.7rem;border:2.5px solid var(--border);transition:all .25s var(--ease);overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+    .avatar-preview:hover{border-color:var(--brand);transform:scale(1.05);box-shadow:0 6px 20px rgba(0,0,0,.12)}
+    .avatar-hint{font-size:.72rem;color:var(--ink-muted);margin-top:.25rem}
+    .stat-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+    .stat-box{text-align:center;padding:1rem;border-radius:14px;background:var(--bg);transition:all .2s var(--ease)}
+    .stat-box:hover{background:rgba(27,107,125,.04)}
+    .stat-box .num{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:800;color:var(--ink)}
+    .stat-box .lbl{font-size:.68rem;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.8px;font-weight:500}
+
+    .empty{text-align:center;padding:2rem .5rem;color:var(--ink-muted)}
+    .empty i{font-size:2rem;opacity:.35;margin-bottom:.5rem;display:block}
+    .empty p{font-size:.85rem;margin-bottom:.8rem}
+    @media(max-width:1100px){.dash-grid{grid-template-columns:1fr 420px}.dash-grid>div:last-child{position:static}}
+    @media(max-width:900px){.dash-grid{grid-template-columns:1fr !important}}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="Index.html" class="nav-logo"><div class="ico"><i class="fas fa-paper-plane"></i></div><div>Link Turismo<small>dashboard</small></div></a>
+    <div class="nav-actions"><a href="Perfil.html" class="btn btn-ghost btn-sm hide-m" id="navProfile" target="_blank"><i class="fas fa-external-link-alt"></i> Mi perfil</a></div>
+  </nav>
+  <div class="dash">
+    <div class="dash-banner"><div class="dash-banner-inner">
+      <div class="dash-ava" id="dAvatar"><i class="fas fa-user"></i></div>
+      <div class="dash-info"><h2 id="dName">Cargando...</h2><div class="role" id="dRole">-</div><div class="url-chip" id="dUrl" title="Copiar enlace"><i class="fas fa-link"></i> <span id="dUrlText">tulink.pe/tu-perfil</span> <i class="fas fa-copy"></i></div></div>
+    </div></div>
+    <div class="dash-grid">
+      <div style="display:flex;flex-direction:column;gap:1.2rem">
+        <div class="card">
+          <div class="card-head"><h3><i class="fas fa-link"></i> Mis enlaces</h3><button class="btn btn-fill btn-sm btn-pill" id="addLinkBtn"><i class="fas fa-plus"></i> Agregar</button></div>
+          <div class="add-form" id="addForm">
+            <div class="field-row"><input type="text" id="linkTitle" placeholder="Título del enlace"><select id="linkPlatform"><option value="custom">Enlace personalizado</option><option value="instagram">Instagram</option><option value="facebook">Facebook</option><option value="youtube">YouTube</option><option value="tiktok">TikTok</option><option value="twitter">Twitter / X</option><option value="whatsapp">WhatsApp</option><option value="tripadvisor">TripAdvisor</option><option value="booking">Booking.com</option><option value="airbnb">Airbnb</option><option value="linkedin">LinkedIn</option><option value="blog">Blog / Sitio web</option><option value="email">Correo electrónico</option><option value="phone">Teléfono</option></select></div>
+            <input type="url" id="linkUrl" placeholder="https://..." style="margin-bottom:.7rem;margin-top:.7rem">
+            <input type="text" id="linkDesc" placeholder="Descripción corta (opcional)" style="margin-bottom:.7rem">
+            <div class="af-actions"><button class="btn btn-ghost btn-sm" id="cancelBtn">Cancelar</button><button class="btn btn-fill btn-sm btn-pill" id="saveBtn"><i class="fas fa-check"></i> Guardar</button></div>
+          </div>
+          <div class="links-list" id="linksList"><div class="empty"><i class="fas fa-link"></i><p>Agrega tu primer enlace para empezar</p></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3><i class="fas fa-user-pen"></i> Tu perfil</h3></div>
+          <form id="profileForm">
+            <div class="field-row"><div class="field"><label>Nombre completo</label><input type="text" id="eName"></div><div class="field"><label>Rubro</label><select id="eCategory"><option value="guia-turistico">Guía turístico</option><option value="agencia-viaje">Agencia de viajes</option><option value="hotel">Hotel / Alojamiento</option><option value="fotografo">Fotografía de viaje</option><option value="creador-contenido">Creador de contenido</option><option value="gastronomia">Gastronomía local</option><option value="transporte">Transporte turístico</option><option value="experiencias">Experiencias / Aventura</option><option value="otro">Otro</option></select></div></div>
+            <div class="field"><label>Título profesional</label><input type="text" id="eTitle" placeholder="Ej: Guía certificada en turismo peruano"></div>
+            <div class="field"><label>Sobre ti</label><textarea id="eBio" rows="3" placeholder="Cuéntanos tu historia..." style="width:100%;padding:.7rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius);font-family:inherit;font-size:.88rem;resize:vertical"></textarea></div>
+            <div class="field"><label>Foto de perfil</label><div style="display:flex;align-items:center;gap:1rem"><div class="avatar-preview" id="avatarPreview" title="Cambiar foto"></div><div><input type="file" id="avatarFile" accept="image/*" style="display:none"><div style="display:flex;gap:.5rem"><button type="button" class="btn btn-ghost btn-sm" id="avatarUploadBtn"><i class="fas fa-camera"></i> Subir foto</button><button type="button" class="btn btn-ghost btn-sm" id="avatarRemoveBtn" style="display:none"><i class="fas fa-trash"></i> Quitar</button></div><div class="avatar-hint">JPG o PNG, se ajusta automáticamente</div></div></div></div>
+            <button type="submit" class="btn btn-fill btn-sm btn-pill"><i class="fas fa-check"></i> Guardar cambios</button>
+          </form>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1.2rem">
+        <div class="card"><div class="card-head"><h3><i class="fas fa-chart-simple"></i> Estadísticas</h3></div><div class="stat-row"><div class="stat-box"><div class="num" id="sLinks">0</div><div class="lbl">Enlaces</div></div><div class="stat-box"><div class="num" id="sClicks">0</div><div class="lbl">Clics</div></div></div></div>
+        <div class="card">
+          <div class="card-head"><h3><i class="fas fa-wand-magic-sparkles"></i> Estilo rápido</h3></div>
+          <div class="presets-grid" id="presetsGrid">
+            <button class="preset-btn active" data-preset="classico"><span class="preset-icon">🌅</span><span class="preset-name">Clásico</span></button>
+            <button class="preset-btn" data-preset="elegante"><span class="preset-icon">🌙</span><span class="preset-name">Elegante</span></button>
+            <button class="preset-btn" data-preset="vibrante"><span class="preset-icon">✨</span><span class="preset-name">Vibrante</span></button>
+            <button class="preset-btn" data-preset="natural"><span class="preset-icon">🏛️</span><span class="preset-name">Natural</span></button>
+          </div>
+        </div>
+        <div class="card" style="padding:1rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+            <h3 style="font-family:'Sora',sans-serif;font-size:.88rem;font-weight:700;display:flex;align-items:center;gap:8px;margin:0"><i class="fas fa-sliders" style="color:var(--brand)"></i> Personalización <span id="czActiveBadge" style="display:none;background:var(--brand);color:#fff;border-radius:100px;padding:0 6px;font-size:.65rem;font-weight:800;line-height:18px;min-width:18px;text-align:center">0</span></h3>
+            <button class="cz-reset" id="czReset" type="button">Restablecer</button>
+          </div>
+
+          <details class="accordion-item" open>
+            <summary class="accordion-header"><i class="fas fa-fill-drip"></i> Fondo</summary>
+            <div class="accordion-body"><div class="cz-group"><div style="display:flex;flex-wrap:wrap;gap:6px" data-cz-group="bg"><button class="cz-chip active" data-cz-value="">Automático</button><button class="cz-chip" data-cz-value="cz-bg-solid">Claro sólido</button><button class="cz-chip" data-cz-value="cz-bg-dark">Oscuro</button><button class="cz-chip" data-cz-value="cz-bg-gradient">Degradado</button><button class="cz-chip" data-cz-value="cz-bg-glass">Glass</button><button class="cz-chip" data-cz-value="cz-bg-pattern">Textura</button><button class="cz-chip" data-cz-value="cz-bg-mesh">Malla</button><button class="cz-chip" data-cz-value="cz-bg-dark-gradient">Deg. oscuro</button></div></div></div>
+          </details>
+
+          <details class="accordion-item">
+            <summary class="accordion-header"><i class="fas fa-mountain-sun"></i> Identidad turística</summary>
+            <div class="accordion-body">
+              <div class="cz-group">
+                <div class="bg-grid" id="bgGrid"></div>
+              </div>
+              <div class="cz-group">
+                <div class="cz-group-label">Efecto</div>
+                <div class="bg-actions">
+                  <select id="bgEffectSelect"></select>
+                </div>
+              </div>
+              <div class="cz-group">
+                <div class="cz-group-label">Opacidad del velo <span id="bgOpacityVal" style="color:var(--ink-muted);font-weight:500;text-transform:none;letter-spacing:0"></span></div>
+                <input type="range" class="cz-slider" id="bgOpacity" min="0" max="80" step="5">
+              </div>
+            </div>
+          </details>
+
+          <details class="accordion-item">
+            <summary class="accordion-header"><i class="fas fa-hand-pointer"></i> Botones</summary>
+            <div class="accordion-body">
+              <div class="cz-group"><div class="cz-group-label">Color enlace</div><div style="display:flex;flex-wrap:wrap;gap:6px" data-cz-group="accent"><button class="cz-chip active" data-cz-value="">Tema</button><button class="cz-chip" data-cz-value="cz-accent-ocean" style="border-color:#1b6b7d;color:#1b6b7d" title="Océano">🌊</button><button class="cz-chip" data-cz-value="cz-accent-sky" style="border-color:#0ea5e9;color:#0ea5e9" title="Cielo">☁️</button><button class="cz-chip" data-cz-value="cz-accent-violet" style="border-color:#8b5cf6;color:#8b5cf6" title="Violeta">💜</button><button class="cz-chip" data-cz-value="cz-accent-pink" style="border-color:#ec4899;color:#ec4899" title="Rosa">🌸</button><button class="cz-chip" data-cz-value="cz-accent-orange" style="border-color:#f97316;color:#f97316" title="Naranja">🍊</button><button class="cz-chip" data-cz-value="cz-accent-gold" style="border-color:#ca8a04;color:#ca8a04" title="Oro">⭐</button><button class="cz-chip" data-cz-value="cz-accent-emerald" style="border-color:#10b981;color:#10b981" title="Esmeralda">💚</button><button class="cz-chip" data-cz-value="cz-accent-red" style="border-color:#ef4444;color:#ef4444" title="Rojo">❤️</button><button class="cz-chip" data-cz-value="cz-accent-cyan" style="border-color:#06b6d4;color:#06b6d4" title="Cyan">💎</button><button class="cz-chip" data-cz-value="cz-accent-fuchsia" style="border-color:#d946ef;color:#d946ef" title="Fucsia">🔮</button><button class="cz-chip" data-cz-value="cz-accent-indigo" style="border-color:#6366f1;color:#6366f1" title="Índigo">🔵</button><button class="cz-chip" data-cz-value="cz-accent-coral" style="border-color:#f97066;color:#f97066" title="Coral">🪸</button></div><div style="display:flex;align-items:center;gap:8px;margin-top:6px"><label style="font-size:.72rem;font-weight:600;color:var(--ink-soft)">Personalizado</label><input type="color" id="czAccentCustom" value="#1b6b7d" style="width:32px;height:26px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;padding:1px;background:var(--surface)"></div></div>
+              <div class="cz-group"><div class="cz-group-label">Estilo</div><div style="display:flex;flex-wrap:wrap;gap:6px" data-cz-group="btn"><button class="cz-chip active" data-cz-value="">Automático</button><button class="cz-chip" data-cz-value="cz-btn-solid">Sólido</button><button class="cz-chip" data-cz-value="cz-btn-outline">Contorno</button><button class="cz-chip" data-cz-value="cz-btn-glass">Glass</button><button class="cz-chip" data-cz-value="cz-btn-neon">Neón</button><button class="cz-chip" data-cz-value="cz-btn-gradient">Degradado</button><button class="cz-chip" data-cz-value="cz-btn-glass-dark">Cristal oscuro</button><button class="cz-chip" data-cz-value="cz-btn-minimal">Minimal</button></div></div>
+              <div class="cz-group"><div class="cz-group-label">Hover</div><div style="display:flex;flex-wrap:wrap;gap:6px" data-cz-group="hover"><button class="cz-chip active" data-cz-value="">Automático</button><button class="cz-chip" data-cz-value="cz-hover-color">Color</button><button class="cz-chip" data-cz-value="cz-hover-scale">Escala</button><button class="cz-chip" data-cz-value="cz-hover-glow">Glow</button><button class="cz-chip" data-cz-value="cz-hover-lift">Elevación</button><button class="cz-chip" data-cz-value="cz-hover-shadow">Sombra</button><button class="cz-chip" data-cz-value="cz-hover-bounce">Rebote</button><button class="cz-chip" data-cz-value="cz-hover-glow-color">Brillo</button><button class="cz-chip" data-cz-value="cz-hover-underline">Subrayado</button></div></div>
+              <div class="cz-group"><div class="cz-group-label">Borde</div><div style="display:flex;flex-wrap:wrap;gap:6px" data-cz-group="border"><button class="cz-chip active" data-cz-value="">Automático</button><button class="cz-chip" data-cz-value="cz-border-none">Sin borde</button><button class="cz-chip" data-cz-value="cz-border-thin">Fino</button><button class="cz-chip" data-cz-value="cz-border-thick">Grueso</button></div></div>
+              <div class="cz-group"><div class="cz-group-label">Sombra</div><div style="display:flex;flex-wrap:wrap;gap:6px" data-cz-group="shadow"><button class="cz-chip active" data-cz-value="">Automática</button><button class="cz-chip" data-cz-value="cz-shadow-none">Ninguna</button><button class="cz-chip" data-cz-value="cz-shadow-soft">Suave</button><button class="cz-chip" data-cz-value="cz-shadow-md">Media</button><button class="cz-chip" data-cz-value="cz-shadow-strong">Fuerte</button><button class="cz-chip" data-cz-value="cz-shadow-neon">Glow</button></div></div>
+            </div>
+          </details>
+
+          <details class="accordion-item">
+            <summary class="accordion-header"><i class="fas fa-font"></i> Texto</summary>
+            <div class="accordion-body">
+              <div class="cz-group"><div class="cz-group-label">Estilo nombre</div><div style="display:flex;flex-wrap:wrap;gap:6px" data-cz-group="title"><button class="cz-chip active" data-cz-value="">Automático</button><button class="cz-chip" data-cz-value="cz-title-gradient">Degradado</button><button class="cz-chip" data-cz-value="cz-title-shadow">Sombra</button></div></div>
+              <div class="cz-group"><div class="cz-group-label">Tamaño avatar <span id="czAvatarSizeVal" style="color:var(--ink-muted);font-weight:500;text-transform:none;letter-spacing:0"></span></div><input type="range" class="cz-slider" id="czAvatarSize" min="40" max="120" step="4"></div>
+            </div>
+          </details>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1.2rem;position:sticky;top:80px;align-self:start;height:calc(100vh - 100px)">
+        <div class="card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;height:100%">
+          <div class="card-head" style="padding:.7rem 1.2rem;margin:0;border-bottom:1px solid var(--border)"><h3><i class="fas fa-eye"></i> Vista previa</h3></div>
+          <iframe src="Perfil.html" style="width:100%;flex:1;border:none" id="previewFrame"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="overlay" id="editOverlay"><div class="modal"><h3><i class="fas fa-pen"></i> Editar enlace</h3><input type="hidden" id="mLinkId"><div class="field"><label>Título</label><input type="text" id="mTitle"></div><div class="field"><label>URL</label><input type="url" id="mUrl"></div><div class="field"><label>Descripción</label><input type="text" id="mDesc"></div><div class="af-actions"><button class="btn btn-ghost btn-sm" id="mCancel">Cancelar</button><button class="btn btn-fill btn-sm btn-pill" id="mSave"><i class="fas fa-check"></i> Actualizar</button></div></div></div>
+  <div id="toast"></div>
+  <script src="shared.js"></script>
+  <script>
+    window.addEventListener('error',function(e){var b=document.getElementById('jsErrBanner');if(!b){b=document.createElement('div');b.id='jsErrBanner';b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#c0392b;color:#fff;padding:.7rem 1rem;font:600 .8rem/1.4 sans-serif;text-align:center';document.body.prepend(b)}b.textContent='Error: '+e.message});
+    var user=null;
+    function updateAvatarPreview(){applyAvatar(document.getElementById('avatarPreview'),user);document.getElementById('avatarRemoveBtn').style.display=user.avatarImg?'':'none'}
+    function processAvatarFile(file){if(!file.type.startsWith('image/')){toast('Debe ser imagen','err');return}if(file.size>8*1024*1024){toast('Máx 8MB','err');return}var r=new FileReader();r.onload=function(ev){var img=new Image();img.onload=function(){var s=320,c=document.createElement('canvas');c.width=s;c.height=s;var x=c.getContext('2d'),sc=Math.max(s/img.width,s/img.height),w=img.width*sc,h=img.height*sc;x.drawImage(img,(s-w)/2,(s-h)/2,w,h);user.avatarImg=c.toDataURL('image/jpeg',.85);saveData(user);updateAvatarPreview();applyAvatar(document.getElementById('dAvatar'),user);renderPreview();toast('Foto actualizada!','ok')};img.onerror=function(){toast('Error imagen','err')};img.src=ev.target.result};r.onerror=function(){toast('Error archivo','err')};r.readAsDataURL(file)}
+    function init(){var data=getData();if(!data){data={nombre:'',titulo:'',descripcion:'',region:'Nacional',avatar:'',enlaces:[],template:'classic',theme:'teal',clicks:0,category:'guia-turistico',bio:'',custom:Object.assign({},CUSTOM_DEFAULTS)};saveData(data)}else{if(!data.template)data.template='classic';if(!data.theme)data.theme='teal';if(!data.clicks)data.clicks=0;if(!data.custom)data.custom=Object.assign({},CUSTOM_DEFAULTS);if(!data.category)data.category='guia-turistico';if(!data.bio)data.bio=data.descripcion||'';if(!data.enlaces)data.enlaces=[];data.enlaces=data.enlaces.map(function(e){if(typeof e==='string')return{id:uid(),title:'Enlace',platform:'custom',url:e,description:'',clicks:0,enabled:true};if(!e.id)e.id=uid();if(!e.title)e.title=e.texto||'Enlace';if(!e.platform)e.platform='custom';if(!e.description)e.description='';if(e.clicks===undefined)e.clicks=0;if(e.enabled===undefined)e.enabled=true;return e});saveData(data)}user=data;applyAvatar(document.getElementById('dAvatar'),data);updateAvatarPreview();document.getElementById('dName').textContent=data.nombre||'Tu nombre';document.getElementById('dRole').textContent=data.titulo||CATS[data.category]||'';document.getElementById('dUrlText').textContent='tulink.pe/'+(data.username||'tu-perfil');document.getElementById('dUrl').onclick=function(){var u=location.origin+'/Perfil.html';navigator.clipboard?.writeText(u).then(function(){toast('Enlace copiado!','ok')}).catch(function(){toast(u)})};document.getElementById('eName').value=data.nombre||'';document.getElementById('eCategory').value=data.category||'guia-turistico';document.getElementById('eTitle').value=data.titulo||'';document.getElementById('eBio').value=data.bio||'';render();applyTheme(user.theme);setupPresetPicker();setupCustomizationPanel()}
+    function render(){renderLinks();renderPreview();updateStats()}
+    function renderLinks(){var c=document.getElementById('linksList');if(!user.enlaces.length){c.innerHTML='<div class="empty"><i class="fas fa-link"></i><p>Agrega tu primer enlace</p></div>';return}c.innerHTML=user.enlaces.map(function(l){var pl=PLAT[l.platform]||PLAT.custom;return '<div class="link-row"><div class="l-icon" style="background:'+pl.c+'"><i class="'+pl.i+'"></i></div><div class="l-body"><h4>'+esc(l.title)+'</h4><p>'+esc(l.description||l.url)+'</p></div><div class="l-btns"><button title="Editar" onclick="openModal(\''+l.id+'\')"><i class="fas fa-pen"></i></button><button title="'+(l.enabled?'Ocultar':'Mostrar')+'" onclick="toggleLink(\''+l.id+'\')"><i class="fas fa-'+(l.enabled?'eye':'eye-slash')+'"></i></button><button class="del" title="Eliminar" onclick="delLink(\''+l.id+'\')"><i class="fas fa-trash"></i></button></div></div>'}).join('')}
+    function renderPreview(){var frame=document.getElementById('previewFrame');if(frame&&frame.contentWindow){try{frame.contentWindow.postMessage({type:'refresh',user:user},'*')}catch(e){}}}
+    function renderStickerPreview(){}
+    function updateStats(){document.getElementById('sLinks').textContent=user.enlaces.length;document.getElementById('sClicks').textContent=user.clicks||0}
+    function updateCzBadge(){var b=document.getElementById('czActiveBadge');if(!b)return;var c=Object.assign({},CUSTOM_DEFAULTS,user.custom||{});var n=0;CZ_GROUPS.forEach(function(k){if(c[k])n++});if(c.avatarSize!==CUSTOM_DEFAULTS.avatarSize)n++;if(c.accentCustom)n++;if(c.bgImage)n++;b.textContent=n;b.style.display=n>0?'inline-flex':'none'}
+    function setupCustomizationPanel(){if(!user.custom)user.custom=Object.assign({},CUSTOM_DEFAULTS);var custom=user.custom;document.querySelectorAll('[data-cz-group]').forEach(function(group){var key=group.dataset.czGroup;var chips=group.querySelectorAll('.cz-chip');chips.forEach(function(chip){chip.classList.toggle('active',(custom[key]||'')===chip.dataset.czValue);chip.onclick=function(){chips.forEach(function(c2){c2.classList.remove('active')});chip.classList.add('active');custom[key]=chip.dataset.czValue;if(key==='accent'){custom.accentCustom='';var cp=document.getElementById('czAccentCustom');if(cp)cp.value='#1b6b7d'}saveData(user);renderPreview();updateCzBadge()}})});var avS=document.getElementById('czAvatarSize'),avSVal=document.getElementById('czAvatarSizeVal');avS.value=custom.avatarSize??CUSTOM_DEFAULTS.avatarSize;avSVal.textContent=avS.value+'px';avS.oninput=function(){custom.avatarSize=Number(avS.value);avSVal.textContent=avS.value+'px';saveData(user);renderPreview();updateCzBadge()};var acC=document.getElementById('czAccentCustom');acC.value=custom.accentCustom||'#1b6b7d';acC.oninput=function(){custom.accentCustom=acC.value;custom.accent='';document.querySelectorAll('[data-cz-group="accent"] .cz-chip').forEach(function(c){c.classList.remove('active')});saveData(user);renderPreview();updateCzBadge()};document.getElementById('czReset').onclick=function(){user.custom=Object.assign({},CUSTOM_DEFAULTS);saveData(user);setupCustomizationPanel();setupBgPicker();renderPreview();updateCzBadge();toast('Personalización restablecida','ok')};updateCzBadge();setupBgPicker()}
+    function setupBgPicker(){var custom=user.custom||{};var bgImage=custom.bgImage||'';var bgEffect=custom.bgEffect||'parallax';var bgOpacity=custom.bgOpacity!==undefined?custom.bgOpacity:40;
+      var effSel=document.getElementById('bgEffectSelect');effSel.innerHTML='';Object.keys(BG_EFFECTS).forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=BG_EFFECTS[k];if(k===bgEffect)o.selected=true;effSel.appendChild(o)});effSel.onchange=function(){custom.bgEffect=effSel.value;saveData(user);renderPreview();updateCzBadge()};
+      var opSlider=document.getElementById('bgOpacity'),opVal=document.getElementById('bgOpacityVal');opSlider.value=bgOpacity;opVal.textContent=bgOpacity+'%';opSlider.oninput=function(){custom.bgOpacity=Number(opSlider.value);opVal.textContent=opSlider.value+'%';saveData(user);renderPreview();updateCzBadge()};
+      renderBgGrid()}
+    function renderBgGrid(){var custom=user.custom||{};var bgImage=custom.bgImage||'';var grid=document.getElementById('bgGrid');
+      var html='<div class="bg-no-bg'+(!bgImage?' active':'')+'" id="bgNoBg"><i class="fas fa-ban" style="font-size:1.2rem;opacity:.3"></i>Sin imagen</div>';
+      TURISMO_FONDOS.forEach(function(f){html+='<div class="bg-thumb'+(bgImage===f.id?' active':'')+'" data-bgid="'+f.id+'"><img src="'+f.src+'" alt="'+esc(f.label)+'" loading="lazy"><div class="bg-label">'+esc(f.label)+'</div></div>'});
+      grid.innerHTML=html;
+      document.getElementById('bgNoBg').onclick=function(){custom.bgImage='';saveData(user);renderBgGrid();renderPreview();updateCzBadge()};
+      grid.querySelectorAll('.bg-thumb').forEach(function(el){el.onclick=function(){custom.bgImage=el.dataset.bgid;saveData(user);renderBgGrid();renderPreview();updateCzBadge()}})}
+    function getCurrentPreset(){for(var k in PRESETS){var p=PRESETS[k];if(user.template===p.template&&user.theme===p.theme)return k}return null}
+    function setupPresetPicker(){var btns=document.querySelectorAll('.preset-btn');var cur=getCurrentPreset();btns.forEach(function(b){b.classList.toggle('active',b.dataset.preset===cur);b.onclick=function(){btns.forEach(function(x){x.classList.remove('active')});b.classList.add('active');var preset=PRESETS[b.dataset.preset];if(!preset)return;user.template=preset.template;user.theme=preset.theme;user.custom=Object.assign({},preset.custom);saveData(user);applyTheme(user.theme);setupCustomizationPanel();renderPreview();updateCzBadge();toast('Estilo aplicado!','ok')}})}
+    function renderStickerPreview(){var container=document.getElementById('pSticker');if(!container)return;container.innerHTML='';if(!user||!user.sticker||user.sticker==='ninguno')return;var stickers={condor:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#1b6b7d"/><text x="50" y="58" text-anchor="middle" font-size="40">🦅</text></svg>',llama:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#d4a76a"/><text x="50" y="58" text-anchor="middle" font-size="40">🦙</text></svg>',inca:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#8b3222"/><text x="50" y="58" text-anchor="middle" font-size="40">🏛️</text></svg>',selva:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#2d6a4f"/><text x="50" y="58" text-anchor="middle" font-size="40">🌿</text></svg>',ola:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#3a9db0"/><text x="50" y="58" text-anchor="middle" font-size="40">🌊</text></svg>',sol:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#e07a5f"/><text x="50" y="58" text-anchor="middle" font-size="40">☀️</text></svg>'};if(stickers[user.sticker])container.innerHTML=stickers[user.sticker]}
+    document.getElementById('avatarPreview').onclick=function(){document.getElementById('avatarFile').click()};
+    document.getElementById('avatarUploadBtn').onclick=function(){document.getElementById('avatarFile').click()};
+    document.getElementById('avatarFile').onchange=function(e){if(e.target.files[0])processAvatarFile(e.target.files[0])};
+    document.getElementById('avatarRemoveBtn').onclick=function(){user.avatarImg=null;saveData(user);document.getElementById('avatarFile').value='';updateAvatarPreview();applyAvatar(document.getElementById('dAvatar'),user);renderPreview();toast('Foto eliminada','ok')};
+    document.getElementById('addLinkBtn').onclick=function(){var af=document.getElementById('addForm');af.classList.toggle('open');if(af.classList.contains('open'))document.getElementById('linkTitle').focus()};
+    document.getElementById('cancelBtn').onclick=function(){document.getElementById('addForm').classList.remove('open');resetForm()};
+    document.getElementById('saveBtn').onclick=function(){var t=document.getElementById('linkTitle').value.trim(),p=document.getElementById('linkPlatform').value,u=document.getElementById('linkUrl').value.trim(),d=document.getElementById('linkDesc').value.trim();if(!t||!u){toast('Título y URL requeridos','err');return}user.enlaces.push({id:uid(),title:t,platform:p,url:u,description:d,clicks:0,enabled:true});saveData(user);render();document.getElementById('addForm').classList.remove('open');resetForm();toast('Enlace agregado!','ok')};
+    document.getElementById('profileForm').addEventListener('submit',function(e){e.preventDefault();user.nombre=document.getElementById('eName').value.trim()||user.nombre;user.category=document.getElementById('eCategory').value;user.titulo=document.getElementById('eTitle').value.trim();user.bio=document.getElementById('eBio').value.trim();user.descripcion=user.bio;saveData(user);document.getElementById('dName').textContent=user.nombre;document.getElementById('dRole').textContent=user.titulo||CATS[user.category]||'';applyAvatar(document.getElementById('dAvatar'),user);updateAvatarPreview();renderPreview();toast('Perfil actualizado!','ok')});
+    document.getElementById('editOverlay').onclick=function(e){if(e.target===e.currentTarget)closeModal()};
+    document.getElementById('mCancel').onclick=closeModal;
+    document.getElementById('mSave').onclick=updateLink;
+    function openModal(lid){var l=user.enlaces.find(function(x){return x.id===lid});if(!l)return;document.getElementById('mLinkId').value=lid;document.getElementById('mTitle').value=l.title;document.getElementById('mUrl').value=l.url;document.getElementById('mDesc').value=l.description||'';document.getElementById('editOverlay').classList.add('open')}
+    function closeModal(){document.getElementById('editOverlay').classList.remove('open')}
+    function updateLink(){var lid=document.getElementById('mLinkId').value,l=user.enlaces.find(function(x){return x.id===lid});if(!l)return;var t=document.getElementById('mTitle').value.trim(),u=document.getElementById('mUrl').value.trim();if(!t||!u){toast('Título y URL requeridos','err');return}l.title=t;l.url=u;l.description=document.getElementById('mDesc').value.trim();saveData(user);closeModal();render();toast('Enlace actualizado!','ok')}
+    function toggleLink(lid){var l=user.enlaces.find(function(x){return x.id===lid});if(!l)return;l.enabled=!l.enabled;saveData(user);toast(l.enabled?'Activado':'Ocultado','ok');render()}
+    function delLink(lid){if(!confirm('¿Eliminar este enlace?'))return;user.enlaces=user.enlaces.filter(function(x){return x.id!==lid});saveData(user);render();toast('Eliminado','ok')}
+    function resetForm(){document.getElementById('linkTitle').value='';document.getElementById('linkPlatform').value='custom';document.getElementById('linkUrl').value='';document.getElementById('linkDesc').value=''}
+    var lastSnapshot=localStorage.getItem(STORAGE_KEY);
+    function syncFromExternalChange(){var current=localStorage.getItem(STORAGE_KEY);if(current===lastSnapshot)return;lastSnapshot=current;var fresh=getData();if(!fresh||!user)return;user.clicks=fresh.clicks||0;if(Array.isArray(fresh.enlaces)){fresh.enlaces.forEach(function(fe){var local=user.enlaces.find(function(x){return x.id===fe.id});if(local)local.clicks=fe.clicks||0})}updateStats()}
+    if(syncChannel)syncChannel.onmessage=syncFromExternalChange;
+    window.addEventListener('storage',syncFromExternalChange);
+    setInterval(syncFromExternalChange,1000);
+    init();
+  </script>
+</body>
+</html>
